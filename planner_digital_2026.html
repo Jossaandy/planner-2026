@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planner 2026 • Jossandy</title>
+  <style>
+    :root {
+      --bg: #FFF8F6;
+      --card: #FFFFFF;
+      --primary: #E6B7B0;
+      --border: #F2D6D1;
+      --text: #4A3B3A;
+    }
+
+    body.dark {
+      --bg: #1E1A1A;
+      --card: #2A2424;
+      --primary: #C89B94;
+      --border: #3A3030;
+      --text: #F5EDED;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      transition: 0.3s;
+    }
+
+    header {
+      background: var(--primary);
+      padding: 25px;
+      text-align: center;
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 20px;
+      padding: 8px 14px;
+      cursor: pointer;
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.85em;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .month {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 25px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .month h2 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 70px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px;
+      resize: vertical;
+      font-family: inherit;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .week {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85em;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌷 Planner 2026</h1>
+  <p>Planner digital personalizado da Jossandy</p>
+  <div class="top-actions">
+    <button onclick="toggleDark()">🌙 Modo escuro</button>
+    <button onclick="toggleMusic()">🎧 Golden hour</button>
+  </div>
+</header>
+
+<audio id="bgMusic" loop>
+  <!-- Coloca aqui o ficheiro mp3 da música -->
+  <source src="golden-hour.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" id="planner"></div>
+
+<footer>
+  © 2026 • Planner rosa gold • tudo guardado automaticamente 💗
+</footer>
+
+<script>
+  const months = [
+    '🌸 Janeiro','💖 Fevereiro','🌷 Março','🌼 Abril','🌿 Maio','☀️ Junho',
+    '🍓 Julho','🌺 Agosto','🍂 Setembro','🎃 Outubro','🍁 Novembro','🎄 Dezembro'
+  ];
+
+  const planner = document.getElementById('planner');
+
+  months.forEach((month, mIndex) => {
+    const div = document.createElement('div');
+    div.className = 'month';
+    div.innerHTML = `
+      <h2>${month}</h2>
+      <textarea data-key="${mIndex}-obj" placeholder="✨ Objetivos do mês"></textarea>
+      <textarea data-key="${mIndex}-prio" placeholder="📝 Prioridades"></textarea>
+      <div class="week"><textarea data-key="${mIndex}-w1" placeholder="Semana 1"></textarea></div>
+      <div class="week"><textarea data-key="${mIndex}-w2" placeholder="Semana 2"></textarea></div>
+      <div class="week"><textarea data-key="${mIndex}-w3" placeholder="Semana 3"></textarea></div>
+      <div class="week"><textarea data-key="${mIndex}-w4" placeholder="Semana 4"></textarea></div>
+    `;
+    planner.appendChild(div);
+  });
+
+  document.querySelectorAll('textarea').forEach(area => {
+    const key = area.dataset.key;
+    area.value = localStorage.getItem(key) || '';
+    area.addEventListener('input', () => {
+      localStorage.setItem(key, area.value);
+    });
+  });
+
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('dark', document.body.classList.contains('dark'));
+  }
+
+  if (localStorage.getItem('dark') === 'true') {
+    document.body.classList.add('dark');
+  }
+
+  const music = document.getElementById('bgMusic');
+  function toggleMusic() {
+    music.paused ? music.play() : music.pause();
+  }
+</script>
+
+</body>
+</html>
